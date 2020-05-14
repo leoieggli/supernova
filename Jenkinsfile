@@ -1,6 +1,6 @@
 def label = "slave-${UUID.randomUUID().toString()}"
 
-podTemplate(label: label, inheritFrom: 'acceptance', cloud: 'paas', yaml: """
+podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', yaml: """
 apiVersion: v1
 kind: Pod
 metadata:
@@ -36,7 +36,7 @@ spec:
         }   
     }
 
-    node(jnlp) {
+    node(acceptance) {
         stage("Test Container OCP"){
             echo "This is a POD template"
             sh "git version"
