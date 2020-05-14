@@ -36,7 +36,7 @@ spec:
     }
 }
 podTemplate(label: acceptance, cloud: 'paas'){
-    node(acceptance) {
+    node(jnlp) {
         stage("Test Container OCP"){
             echo "This is a POD template"
             sh "git version"
