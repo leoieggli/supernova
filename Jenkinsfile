@@ -30,7 +30,7 @@ spec:
         container('kubectl') {
             stage("Test Container kubectl") {
                 echo "This is container KUBECTL"
-                sh "kubectl version"
+                // sh "kubectl version"
             }
         }   
     }
