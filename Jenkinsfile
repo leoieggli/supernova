@@ -34,6 +34,8 @@ spec:
             }
         }   
     }
+}
+podTemplate(label: acceptance, cloud: 'paas'){
     node(acceptance) {
         echo "This is a POD template"
         sh "git version"
