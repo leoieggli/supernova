@@ -19,7 +19,7 @@ spec:
     - cat
     tty: true
 
-"""),
+""")
 podTemplate(label: acceptance, cloud: 'paas'){
     node(label) {
         container('git') {
