@@ -24,7 +24,7 @@ spec:
         container('git') {
             stage("Test Container Git") {
                 echo "This is container GIT"
-                sh "git version"
+                // sh "git version"
             }
         }   
         container('kubectl') {
