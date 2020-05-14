@@ -1,6 +1,7 @@
 def label = "slave-${UUID.randomUUID().toString()}"
 
-podTemplate([label: label, cloud: 'paas', yaml: """
+podTemplate([label: acceptance, cloud: 'paas']
+    [label: label, cloud: 'paas', yaml: """
 apiVersion: v1
 kind: Pod
 metadata:
@@ -19,8 +20,7 @@ spec:
     - cat
     tty: true
 
-"""],
-[label: acceptance, cloud: 'paas']){
+"""]){
     node(label) {
         container('git') {
             stage("Test Container Git") {
