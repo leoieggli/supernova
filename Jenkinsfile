@@ -18,16 +18,14 @@ podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', co
                 // sh "kubectl version"
             }
         }   
-    }
-
-    node(acceptance) {
-        stage("Test Container OCP"){
-            echo "This is a POD template"
-            sh "git version"
-            sh "oc version"
+        container('jnlp') {
+            stage("Test Container OCP"){
+                echo "This is a POD template"
+                sh "git version"
+                sh "oc version"
+            }
         }
     }
-    
 }
 
 slackSend color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful"
