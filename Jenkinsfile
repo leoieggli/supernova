@@ -20,27 +20,28 @@ spec:
     tty: true
 
 """){
-    node(label) {
-        container('git') {
-            stage("Test Container Git") {
-                echo "This is container GIT"
-                // sh "git version"
+    podTemplate(label: acceptance, cloud: 'paas'){
+        node(label) {
+            container('git') {
+                stage("Test Container Git") {
+                    echo "This is container GIT"
+                    // sh "git version"
+                }
+            }   
+            container('kubectl') {
+                stage("Test Container kubectl") {
+                    echo "This is container KUBECTL"
+                    // sh "kubectl version"
+                }
+            }   
+        }
+
+        node(jnlp) {
+            stage("Test Container OCP"){
+                echo "This is a POD template"
+                sh "git version"
+                sh "oc version"
             }
-        }   
-        container('kubectl') {
-            stage("Test Container kubectl") {
-                echo "This is container KUBECTL"
-                // sh "kubectl version"
-            }
-        }   
-    }
-}
-podTemplate(label: acceptance, cloud: 'paas'){
-    node(jnlp) {
-        stage("Test Container OCP"){
-            echo "This is a POD template"
-            sh "git version"
-            sh "oc version"
         }
     }
 }
