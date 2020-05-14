@@ -34,10 +34,11 @@ spec:
             }
         }   
     }
-}
-node(acceptance) {
-    echo "This is a POD template"
-    sh "git version"
-    sh "oc version"
+    node(acceptance) {
+        echo "This is a POD template"
+        sh "git version"
+        sh "oc version"
 
+    }
 }
+slackSend color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful"
