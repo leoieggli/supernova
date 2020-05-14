@@ -3,7 +3,7 @@ def label = "slave-${UUID.randomUUID().toString()}"
 podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', containers: [
     containerTemplate(name: 'git', image: 'alpine/git:latest', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.15.3', command: 'cat', ttyEnabled: true)
-]{
+]){
     
     node(label) {
         container('git') {
