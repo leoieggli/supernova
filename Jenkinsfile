@@ -1,6 +1,6 @@
 def label = "slave-${UUID.randomUUID().toString()}"
 
-podTemplate([label: acceptance, cloud: 'paas']
+podTemplate([label: acceptance, cloud: 'paas'],
     [label: label, cloud: 'paas', yaml: """
 apiVersion: v1
 kind: Pod
