@@ -19,8 +19,7 @@ spec:
     - cat
     tty: true
 
-""")
-podTemplate(label: acceptance, cloud: 'paas'){
+"""){
     node(label) {
         container('git') {
             stage("Test Container Git") {
@@ -35,6 +34,8 @@ podTemplate(label: acceptance, cloud: 'paas'){
             }
         }   
     }
+}
+podTemplate(label: acceptance, cloud: 'paas'){
     node(acceptance) {
         stage("Test Container OCP"){
             echo "This is a POD template"
@@ -43,6 +44,5 @@ podTemplate(label: acceptance, cloud: 'paas'){
         }
     }
 }
-
 
 slackSend color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful"
