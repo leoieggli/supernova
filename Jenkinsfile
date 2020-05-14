@@ -1,6 +1,6 @@
 def label = "slave-${UUID.randomUUID().toString()}"
 
-podTemplate(label: label, cloud: 'paas', yaml: """
+podTemplate([label: label, cloud: 'paas', yaml: """
 apiVersion: v1
 kind: Pod
 metadata:
@@ -19,7 +19,8 @@ spec:
     - cat
     tty: true
 
-"""){
+"""],
+[label: acceptance, cloud: 'paas']){
     node(label) {
         container('git') {
             stage("Test Container Git") {
@@ -34,13 +35,14 @@ spec:
             }
         }   
     }
-}
-podTemplate(label: acceptance, cloud: 'paas'){
     node(acceptance) {
-        echo "This is a POD template"
-        sh "git version"
-        sh "oc version"
-
+        stage("Test Container OCP"){
+            echo "This is a POD template"
+            sh "git version"
+            sh "oc version"
+        }
     }
 }
+
+
 slackSend color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful"
