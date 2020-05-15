@@ -1,19 +1,42 @@
 def label = "slave-${UUID.randomUUID().toString()}"
 
-podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', containers: [
-    containerTemplate(name: 'git', image: 'alpine/git:latest', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'docker', image: 'docker/compose:1.23.2', command: 'cat', ttyEnabled: true)],
-    volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]){
+podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', yaml: """
+apiVersion: v1
+kind: Pod
+metadata:
+labels:
+    container: slave
+spec:
+  containers:
+  - name: brew
+    image: quay.io/homebrew/brew
+    command:
+    - cat
+    tty: true
+  - name: docker
+    image: docker/compose:1.23.2
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - name: docker
+      mountPath: /var/run/docker.sock
+  volumes:
+  - name: docker
+    hostPath:
+      path: /var/run/docker.sock
+      type: Socket
+"""){
     
     node(label) {
-        container('git') {
-            stage("Test Container Git") {
+        container('brew') {
+            stage("Test Container BREW") {
                 echo "This is container GIT"
-                // sh "git version"
+                sh "brew --version"
             }
         }   
         container('docker') {
-            stage("Test Container kubectl") {
+            stage("Test Container DOCKER") {
                 echo "This is container DOCKER"
                 sh "docker version"
             }
