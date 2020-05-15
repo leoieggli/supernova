@@ -23,6 +23,7 @@ podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', co
                 echo "This is a POD template"
                 sh "git version"
                 sh "oc version"
+                sh "go version"
             }
         }
     }
