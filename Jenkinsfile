@@ -2,8 +2,8 @@ def label = "slave-${UUID.randomUUID().toString()}"
 
 podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', containers: [
     containerTemplate(name: 'git', image: 'alpine/git:latest', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.15.3', command: 'cat', ttyEnabled: true)
-]){
+    containerTemplate(name: 'docker', image: 'docker/compose:1.23.2', command: 'cat', ttyEnabled: true)],
+    volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]){
     
     node(label) {
         container('git') {
@@ -12,10 +12,10 @@ podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', co
                 // sh "git version"
             }
         }   
-        container('kubectl') {
+        container('docker') {
             stage("Test Container kubectl") {
-                echo "This is container KUBECTL"
-                // sh "kubectl version"
+                echo "This is container DOCKER"
+                sh "docker version"
             }
         }   
         container('jnlp') {
