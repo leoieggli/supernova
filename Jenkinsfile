@@ -1,37 +1,20 @@
 def label = "slave-${UUID.randomUUID().toString()}"
 
-podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', yaml: """
-apiVersion: v1
-kind: Pod
-metadata:
-labels:
-    container: slave
-spec:
-  containers:
-  - name: brew
-    image: quay.io/homebrew/brew
-    command:
-    - cat
-    tty: true
-  - name: docker
-    image: docker/compose:1.23.2
-    command:
-    - cat
-    tty: true
-
-"""){
+podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', containers: [
+    containerTemplate(name: 'git', image: 'alpine/git:latest', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'docker', image: 'docker/compose:1.23.2', command: 'cat', ttyEnabled: true)]){
     
     node(label) {
-        container('brew') {
-            stage("Test Container BREW") {
+        container('git') {
+            stage("Test Container Git") {
                 echo "This is container GIT"
-                sh "brew --version"
+                // sh "git version"
             }
         }   
         container('docker') {
-            stage("Test Container DOCKER") {
+            stage("Test Container kubectl") {
                 echo "This is container DOCKER"
-                sh "docker version"
+                // sh "docker version"
             }
         }   
         container('jnlp') {
@@ -46,3 +29,11 @@ spec:
 }
 
 slackSend color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful"
+
+triggers {
+    ciBuildTrigger(noSquash: false,
+        providerName: 'Red Hat UMB', selector: 'CI_TYPE LIKE "errata.%"'
+    )
+}
+
+// waitForCIMessage checks: [], overrides: [topic: ''], providerName: 'Red Hat UMB', selector: 'CI_TYPE LIKE "errata.%"'
