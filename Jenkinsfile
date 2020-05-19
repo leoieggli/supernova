@@ -7,10 +7,10 @@ podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', co
     node(label) {
 
         // Wait for message and store message content in variable
-        def msgContent = waitForCIMessage \
-            providerName: 'Red Hat UMB', \
-            selector: 'CI_TYPE LIKE "errata.%"'
-        echo "msgContent = " + msgContent
+        // def msgContent = waitForCIMessage \
+        //     providerName: 'Red Hat UMB', \
+        //     selector: 'CI_TYPE LIKE "errata.%"'
+        // echo "msgContent = " + msgContent
 
         container('git') {
             stage("Test Container Git") {
