@@ -5,6 +5,13 @@ podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', co
     containerTemplate(name: 'docker', image: 'docker/compose:1.23.2', command: 'cat', ttyEnabled: true)]){
     
     node(label) {
+
+        // Wait for message and store message content in variable
+        def msgContent = waitForCIMessage \
+            providerName: 'Red Hat UMB', \
+            selector: 'CI_TYPE LIKE "errata.%"'
+        echo "msgContent = " + msgContent
+
         container('git') {
             stage("Test Container Git") {
                 echo "This is container GIT"
@@ -30,29 +37,41 @@ podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', co
 
 slackSend color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful"
 
+properties([
+  pipelineTriggers([
+    [
+      $class: 'CIBuildTrigger',
+      noSquash: false,
+      providerData: [
+        $class: 'ActiveMQSubscriberProviderData',
+        checks: [
+          [
+            expectedValue: '^foo.*bar$',
+            field: '$.msg.tag'
+          ]
+        ],
+        name: 'Red Hat UMB',
+        overrides: [
+          topic: 'Consumer.rh-jenkins-ci-plugin.da3c13a1-021d-4629-81a1-5f522dc1a9e3.VirtualTopic.qe.ci.>'
+        ],
+        selector: 'CI_TYPE LIKE "errata.%"',
+        timeout: 30
+      ]
+    ]
+  ])
+])
 // waitForCIMessage checks: [], overrides: [topic: ''], providerName: 'Red Hat UMB', selector: 'CI_TYPE LIKE "errata.%"'
 
-ciBuildTrigger {
-    providers {
-      providerDataEnvelope {
-        providerData {
-          activeMQSubscriber {
-            name('Red Hat UMB')
-            selector('CI_TYPE LIKE "errata.%"')
-            // overrides {
-            //   def uuid = "4ba46bbc-949b-11e8-b83f-54ee754ea14c"
-            //   topic("Consumer.rh-jenkins-ci-plugin.${uuid}.VirtualTopic.eng.ci.redhat-container-image.pipeline.running")
-            // }
-            // // Message Checks
-            // checks {
-            //   msgCheck {
-            //     field('$.artifact.type')
-            //     expectedValue("cvp")
-            //   }
-            // }
-          }
-        }
-      }
-    }
-    noSquash(true)
-}
+// ciBuildTrigger {
+//     providers {
+//       providerDataEnvelope {
+//         providerData {
+//           activeMQSubscriber {
+//             name('Red Hat UMB')
+//             selector('CI_TYPE LIKE "errata.%"')
+//           }
+//         }
+//       }
+//     }
+//     noSquash(true)
+// }
