@@ -64,7 +64,7 @@ ciBuildTrigger {
         providerData {
           activeMQSubscriber {
             name('Red Hat UMB')
-            selector('CI_TYPE LIKE "errata.%"')
+            selector('CI_TYPE = "errata.%"')
           }
         }
       }
