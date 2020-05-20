@@ -9,7 +9,7 @@ podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', co
         // Wait for message and store message content in variable
         // def msgContent = waitForCIMessage \
         //     providerName: 'Red Hat UMB', \
-        //     selector: 'CI_TYPE LIKE "errata.%"'
+        //     selector: 'CI_TYPE = "errata.%"'
         // echo "msgContent = " + msgContent
 
         container('git') {
@@ -42,32 +42,32 @@ slackSend color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.B
 //       selector: 'CI_TYPE LIKE "errata.%"'
 //       provider-name: 'Red Hat UMB'
 
-// properties([
-//   pipelineTriggers([
-//     [
-//       $class: 'CIBuildTrigger',
-//       noSquash: false,
-//       providerData: [
-//         $class: 'ActiveMQSubscriberProviderData',
-//         name: 'Red Hat UMB',
-//         selector: 'CI_TYPE LIKE "errata.%"',
-//         timeout: 30
-//       ]
-//     ]
-//   ])
-// ])
+properties([
+  pipelineTriggers([
+    [
+      $class: 'CIBuildTrigger',
+      noSquash: false,
+      providerData: [
+        $class: 'ActiveMQSubscriberProviderData',
+        name: 'Red Hat UMB',
+        selector: 'CI_TYPE = "errata.%"',
+        timeout: 30
+      ]
+    ]
+  ])
+])
 // waitForCIMessage checks: [], overrides: [topic: ''], providerName: 'Red Hat UMB', selector: 'CI_TYPE LIKE "errata.%"'
 
-ciBuildTrigger {
-    providers {
-      providerDataEnvelope {
-        providerData {
-          activeMQSubscriber {
-            name('Red Hat UMB')
-            selector('CI_TYPE = "errata.%"')
-          }
-        }
-      }
-    }
-    noSquash(true)
-}
+// ciBuildTrigger {
+//     providers {
+//       providerDataEnvelope {
+//         providerData {
+//           activeMQSubscriber {
+//             name('Red Hat UMB')
+//             selector('CI_TYPE = "errata.%"')
+//           }
+//         }
+//       }
+//     }
+//     noSquash(true)
+// }
