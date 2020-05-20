@@ -49,16 +49,7 @@ properties([
       noSquash: false,
       providerData: [
         $class: 'ActiveMQSubscriberProviderData',
-        checks: [
-          [
-            expectedValue: '^foo.*bar$',
-            field: '$.msg.tag'
-          ]
-        ],
         name: 'Red Hat UMB',
-        overrides: [
-          topic: 'Consumer.rh-jenkins-ci-plugin.da3c13a1-021d-4629-81a1-5f522dc1a9e3.VirtualTopic.qe.ci.>'
-        ],
         selector: 'CI_TYPE LIKE "errata.%"',
         timeout: 30
       ]
