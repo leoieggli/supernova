@@ -37,11 +37,7 @@ podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', co
 
 slackSend color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful"
 
-// triggers:
-//   - jms-messaging:
-//       selector: 'CI_TYPE LIKE "errata.%"'
-//       provider-name: 'Red Hat UMB'
-
+// CI Trigger using Red Hat UMB
 properties([
   pipelineTriggers([
     [
@@ -65,18 +61,3 @@ properties([
     ]
   ])
 ])
-// waitForCIMessage checks: [], overrides: [topic: ''], providerName: 'Red Hat UMB', selector: 'CI_TYPE LIKE "errata.%"'
-
-// ciBuildTrigger {
-//     providers {
-//       providerDataEnvelope {
-//         providerData {
-//           activeMQSubscriber {
-//             name('Red Hat UMB')
-//             selector('CI_TYPE = "errata.%"')
-//           }
-//         }
-//       }
-//     }
-//     noSquash(true)
-// }
