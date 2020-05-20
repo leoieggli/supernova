@@ -56,7 +56,10 @@ properties([
           ]
         ],
         name: 'Red Hat UMB',
-        selector: "CI_TYPE = \'*errata*\'",
+        overrides: [
+          topic: 'VirtualTopic.qe.ci.>'
+        ],
+        selector: "CI_TYPE = \'errata*\'",
         timeout: 30
       ]
     ]
