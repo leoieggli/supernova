@@ -50,7 +50,7 @@ properties([
       providerData: [
         $class: 'ActiveMQSubscriberProviderData',
         name: 'Red Hat UMB',
-        selector: 'CI_TYPE = "errata.%"',
+        selector: 'CI_TYPE = errata.%',
         timeout: 30
       ]
     ]
