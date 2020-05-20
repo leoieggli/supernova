@@ -49,8 +49,14 @@ properties([
       noSquash: false,
       providerData: [
         $class: 'ActiveMQSubscriberProviderData',
+        checks: [
+          [
+            expectedValue: '^errata_status$',
+            field: 'NEW_FILES'
+          ]
+        ],
         name: 'Red Hat UMB',
-        selector: "CI_TYPE = '*errata*'",
+        selector: "CI_TYPE = \'*errata*\'",
         timeout: 30
       ]
     ]
