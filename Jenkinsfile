@@ -48,9 +48,9 @@ properties([
         // ],
         name: 'Red Hat UMB',
         overrides: [
-          topic: 'Consumer.rh-jenkins-ci-plugin.238b58ce-01e7-11ea-8d71-362beee55a7.VirtualTopic.eng.errata.activity.>'
+          topic: 'Consumer.rh-jenkins-ci-plugin.238b58ce-01e7-11ea-8d71-362beee55a7.VirtualTopic.qe.ci.istio.notifications.>'
         ],
-        selector: "CI_TYPE = \'*errata*\'",
+        selector: "BUILD_TYPE = \'*nightly*\'",
         timeout: 30
       ]
     ]
