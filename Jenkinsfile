@@ -50,7 +50,7 @@ properties([
         overrides: [
           topic: 'Consumer.rh-jenkins-ci-plugin.238b58ce-01e7-11ea-8d71-362beee55a7.VirtualTopic.qe.ci.istio.notifications.>'
         ],
-        selector: "BUILD_TYPE = \'*nightly*\'",
+        selector: "CI_TYPE = \'*image-uploaded*\'",
         timeout: 30
       ]
     ]
