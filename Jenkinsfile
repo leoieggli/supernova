@@ -24,6 +24,7 @@ podTemplate(label: label, inheritFrom: 'acceptance-slave-pod', cloud: 'paas', co
                 sh "git version"
                 sh "oc version"
                 sh "go version"
+                sh "skopeo --help"
             }
         }
     }
